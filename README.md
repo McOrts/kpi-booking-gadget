@@ -1,11 +1,15 @@
 # Gadget DIY para controlar tu empresa.
 Con un claro ejemplo de_Over-engineering_ esta es la guía para la fabricación de un pequeño dispositivo para recibir en tiempo real los indicadores más críticos de nuestro negocio. Y poder interactuar con un backend atendiendo a nuestras peticiones.
-
+![](https://github.com/McOrts/kpi-booking-gadget/blob/master/images/Gadget_KPI_portada.PNG?raw=true)
 Trabajo para una empresa de distribución global de alojamientos hoteleros. Lo que significa que tiene una infraestuctura descentralizada para poder resolver las peticiones de los clientes en su propia región geográfica. Esto lo permite un sistema de sincronismos y cachés que tienen la contrapartida de generar algunos errores de valoración y disponibilidad de reservas.
 
 Este y otros indicadores son críticos y la accesibilidad está reducida a la consulta a través de un sistema de monitorización como DataDog.
 
-Este proyecto representa un ejemplo de cómo la tecnología open-hardware/software puede incorporarse en una gran organización y de cómo se pude aplicar a
+Este proyecto representa un ejemplo de cómo la tecnología open-hardware/software puede incorporarse en una gran organización y del bajo coste de prototipar hardware.
+
+## Arquitectura
+![Arquitectura Gadget KPI](https://github.com/McOrts/kpi-booking-gadget/blob/master/images/Gadget_KPI_arquitectura.png?raw=true)
+
 
 Las tecnologías y herramientas utilizadas son bien conocidad en el mundo maker para IOT:
 * Backend: [Node-RED](https://nodered.org/)
@@ -13,7 +17,8 @@ Las tecnologías y herramientas utilizadas son bien conocidad en el mundo maker 
 * Micro-controlador: ESP-8266 formato [WEMOS D1 mini](https://wiki.wemos.cc/products:d1:d1_mini)
 * Servidor: [Raspberry Pi Zero Wifi](https://www.raspberrypi.org/products/raspberry-pi-zero/)
 
-
+## Siguientes pasos
+Existe una tecnologia y técnica de fabricación de componentes en superficie llamada SMD (Surface Mount Device) que permite la minituarización de los circuitos impresos (PCB). Y en esta linea estoy trabajando para tener unos dispositivos 
 
 ## Agradecimientos y referencias
 - [MQTT.org](http://mqtt.org)
