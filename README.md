@@ -129,6 +129,12 @@ El código fuente en C++ se puede encontrar en [este _sketch_](https://github.co
 ![BB](https://github.com/McOrts/kpi-booking-gadget/blob/master/images/kpi-booking-gadget-device_bb.png?raw=true) 
 ![BB](https://github.com/McOrts/kpi-booking-gadget/blob/master/images/Gadget_KPI_rear.png?raw=true) 
 
+## Demo en vivo
+
+  <a href="http://www.youtube.com/watch?feature=player_embedded&v=7N38AHVoB3g
+  " target="_blank"><img src="http://img.youtube.com/vi/7N38AHVoB3g/0.jpg"
+  alt="Basic video" width="240" height="180" border="10" />
+  
 ## Siguientes pasos
 Existe una tecnologia y técnica de fabricación de componentes en superficie llamada SMD (Surface Mount Device) que permite la minituarización de los circuitos impresos (PCB). Y en esta linea estoy trabajando para tener unos dispositivos 
 
