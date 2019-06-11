@@ -9,18 +9,38 @@ Este y otros indicadores aunque son críticos, su accesibilidad está reducida a
 
 ![](https://github.com/McOrts/kpi-booking-gadget/blob/master/images/Gadget_KPI_Front.JPG?raw=true)
 
+Este dispositivo que representa el _front_ de la aplicación. Tiene tres indicadores luminosos (NeoPixel) y un pulsador que, de izquierda a derecha, son para:
+- Error en las confirmaciones de reserva: 0% verde al 5% rojo.
+- Ventas por el canal B2B2C: 
+-- Se reducen: de blanco a negro
+-- Se incrementan: de negro a blanco
+- Alertas planetarias indicadas con destellos azules y rojos:
+-- Nuevos terremotos en cualquier parte del mundo de cualquier intensidad en la última hora.
+-- Post de un nuevo Twitter de Donald Trump (@realDonaldTrump).
+
 Este proyecto representa un ejemplo de cómo la tecnología open-hardware/software puede incorporarse en una gran organización y del bajo coste con el que se puede prototipar hardware.
 
 ## Arquitectura
-El componente principal de la arquitectura que he utilizado es un _Broker_ de mensajería MQTT (Mosquitto). Los sensores están conectados a puertos GPIO de una mini-CPU que ejecuta un programa especifico para cada uno. Este programa realiza las siguientes tareas:
-- Lee el valor del sensor. 
-- Graba el valor en una BBDD relacional.
-- Envía el valor a:
-	- Una plataforma de _Cloud_ via API Rest.
-	- Un mensaje MQTT a un _topic_ especifico.
-  
+El componente principal que he utilizado en esta arquitectura es un _Broker_ (Mosquitto) de mensajería tipo MQTT. En el _backend_ hay  un orquestador extremadamente sencillo de programar, Node-RED. Como dispositivos periféricos tenermos la tarjeta con los indicadores LED, el teléfono móvil con la pulsera inteligente asociada y un robot modelo OTTO. Todo interconectado con una red Wifi. 
+
 ![Arquitectura Gadget KPI](https://github.com/McOrts/kpi-booking-gadget/blob/master/images/Gadget_KPI_arquitectura.png?raw=true)
 
+La operativa de toda la aplicación parte de las consultas que se hacen desde el _backend_ (Node-RED):
+- Se lanza una petición REST la los web-services:
+-- DATADOG para los indicadores de negocio. [](https://app.datadoghq.com/api/v1/query?api_key=...)
+-- GeoJSON servicio público de alertas globales de terremotos. [](https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson)
+- Se componen los mensajes para los topics de MQTT que la tarjeta está escuchando. La estructura es así:
+```
+`-- hbg
+    |-- kpi
+    |   `-- panic
+    |   `-- operation
+```
+evolutionDW
+bookerror21
+warnings
+
+El Estos dos componentes están ejecutándose en el servidor (Raspberry Pi Zero) 
 
 
 Las tecnologías y herramientas utilizadas son bien conocidad en el mundo maker para IOT:
@@ -28,6 +48,7 @@ Las tecnologías y herramientas utilizadas son bien conocidad en el mundo maker 
 * Broker de colas MQTT: [Eclipse Mosquitto](https://mosquitto.org/)
 * Micro-controlador: ESP-8266 formato [WEMOS D1 mini](https://wiki.wemos.cc/products:d1:d1_mini)
 * Servidor: [Raspberry Pi Zero Wifi](https://www.raspberrypi.org/products/raspberry-pi-zero/)
+* Robot: [Otto](https://www.ottodiy.com/) basado en una versión Wifi no oficial del Arduino Nano.
 
 ## El dispositivo
 Está construido bajo los principios del _Do It Yourselft_. Con las herramientas básicas para soldar y para trabajar con plásticos y estos materiales. Es posible que cualquier persona pueda construir este _gadget_ por si mismo.
