@@ -86,18 +86,48 @@ return msg;
 4. El microcontrolador de la tarjeta es uno de esos clientes, por lo que recibe el mensaje e interpreta su _payload_. Por ejemplo "bookerror21" que lo transformará en una instrucción al puerto digital D4 del ESP8266 con un valor RGB (Rojo,verde,azul) de 210,255,0 encendiendo el primer led en un color casi amarillo.
 
 Para el caso del pulsar el _botón "Panic"_ de la tarjeta. Hay que describir un proceso inverso al anterior:
-1. El 
+1. El microcontrolador generará este mensaje MQTT:
+> /hbg/kpi/panic/on
+2. Y en este caso, el _backend_ está actua como un cliente suscrito a este topic. A partir de aquí, con Node-RED podemos hace casi cualquier cosa. En mi caso me envía un mail con un formato que activa las alertas de mi reloj Xiaomi MiMBand y activa un icoco en el _dashboard_ de la página web servida por Node-RED.
 
 ![Flujo Node-RED del proceso de Panic](https://github.com/McOrts/kpi-booking-gadget/blob/master/images/Node-RED_Flow_Panic.PNG?raw=true) 
 
+3. Adicionalmente he añadido la librería del cliente MQTT al programa del robot OTTO de manera que cuando recibe este mensaje ejecuta la rutina del "Cruzaito":
 
-El Estos dos componentes están ejecutándose en el servidor (Raspberry Pi Zero) 
+### El _Dashboard_
+Node-RED también tiene una serie de nodos con los que se puede montar una página web responsiva. Es fácil utilizar controles y gráficas, así como cajas de texto, formularios, etc...
 
+![Node-RED Dashboard](https://github.com/McOrts/kpi-booking-gadget/blob/master/images/Gadget_KPI_dashboard.png?raw=true)
 
-## El dispositivo
-Está construido bajo los principios del _Do It Yourselft_. Con las herramientas básicas para soldar y para trabajar con plásticos y estos materiales. Es posible que cualquier persona pueda construir este _gadget_ por si mismo.
+El uso es tan simple como dirigir los mensajes a estas 'cajas' y colocarlas en el orden conveniente dentro del _layauut_ del _dashboard_:
 
+![Configuración Node-RED del Dashboard](https://github.com/McOrts/kpi-booking-gadget/blob/master/images/Node-RED_Flow_Dashboard.PNG?raw=true)
 
+## Hardware e instalaciones
+### Servidor 
+Tanto el _Broker_ MQTT de mensajería (Mosquitto) coo el _backend_ (Node-RED) están instalados en un _One Single Computer_ que es la conocida Raspberry Pi Zero. Se puso a la venta en 2015. Con un coste de cinco dólares. llegándose a regalar en el número #40 de la revista The MagPi. Sus características principales son:
+- Procesar ARM 1GHz, single-core CP 
+- Sistema operativo: Raspbian es un distribución de Debian
+- 512MB de RAM
+
+![Raspberry Pi Zero](https://github.com/McOrts/kpi-booking-gadget/blob/master/images/FreeRPIZero.PNG?raw=true) 
+
+Sin entrar en los detalles de la instalación de este servidor para no hacer demasiado largo este documento y para no repetir lo que se puede encontrar perfectamente explicado, estas son las páginas donde se pueden encontrar las instrucciones adecuadas:
+1. [Sistema operativo Raspbian](https://www.raspberrypi.org/documentation/installation/installing-images/README.md)
+2. [Node-RED](https://nodered.org/docs/hardware/raspberrypi)
+3. [Mosquitto](https://www.instructables.com/id/Installing-MQTT-BrokerMosquitto-on-Raspberry-Pi/)
+
+### La tarjeta
+Está construida bajo los principios del _Do It Yourselft_. Con las herramientas básicas para soldar y para trabajar con plásticos y estos materiales. Es posible que cualquier persona pueda construir este _gadget_ por si mismo.
+
+El dispositivo está basado en el microcontrolador SP8266. Cuyo origen está en Shanghai de manos de la empresa Espressif en el 2014.	Pero no nació para usarse como microcontrolador. Si no como controlador Wifi de bajo coste. Este microchip tiene todo el stack TCP/IP que la comunidad Maker adoptó como un dispositivo independiente.
+
+![WEMOS D1 Mini](https://github.com/McOrts/kpi-booking-gadget/blob/master/images/WEMOS-d1-mini-esp8266-board-PINOUT.jpg?raw=true) 
+
+El código fuente en C++ se puede encontrar en [este _sketch_](https://github.com/McOrts/kpi-booking-gadget/tree/master/kpi-booking-gadget-device) de este mismo repositorio. Y este el circuito que puede construirse en muchos formatos:
+
+![BB](https://github.com/McOrts/kpi-booking-gadget/blob/master/images/kpi-booking-gadget-device_bb.png?raw=true) 
+![BB](https://github.com/McOrts/kpi-booking-gadget/blob/master/images/Gadget_KPI_rear.png?raw=true) 
 
 ## Siguientes pasos
 Existe una tecnologia y técnica de fabricación de componentes en superficie llamada SMD (Surface Mount Device) que permite la minituarización de los circuitos impresos (PCB). Y en esta linea estoy trabajando para tener unos dispositivos 
