@@ -7,48 +7,92 @@ Trabajo para una empresa de distribución global de alojamientos hoteleros. Lo q
 
 Este y otros indicadores aunque son críticos, su accesibilidad está reducida a la consulta a través de un sistema de monitorización como DataDog. __A fin de poder monitorizar de una forma efectiva estas alertas, he ideado un _gadget_ en forma de tarjeta de identificación que, conectada por wifi, traduce en tiempo real las cifras de KPIs a codigos de color y destellos de luz__.
 
-![](https://github.com/McOrts/kpi-booking-gadget/blob/master/images/Gadget_KPI_Front.JPG?raw=true)
+![](https://github.com/McOrts/kpi-booking-gadget/blob/master/images/Gadget_KPI.gif?raw=true)
 
 Este dispositivo que representa el _front_ de la aplicación. Tiene tres indicadores luminosos (NeoPixel) y un pulsador que, de izquierda a derecha, son para:
-- Error en las confirmaciones de reserva: 0% verde al 5% rojo.
-- Ventas por el canal B2B2C: 
--- Se reducen: de blanco a negro
--- Se incrementan: de negro a blanco
-- Alertas planetarias indicadas con destellos azules y rojos:
--- Nuevos terremotos en cualquier parte del mundo de cualquier intensidad en la última hora.
--- Post de un nuevo Twitter de Donald Trump (@realDonaldTrump).
+- __Error en las confirmaciones de reserva__: 0% verde al 5% rojo.
+- __Ventas por el canal B2B2C__: 
+    - Se reducen: de blanco a negro
+    - Se incrementan: de negro a blanco
+- __Alertas planetarias__ indicadas con destellos azules y rojos:
+    - Nuevos terremotos en cualquier parte del mundo de cualquier intensidad en la última hora.
+    - Post de un nuevo Twitter de Donald Trump (@realDonaldTrump).
 
 Este proyecto representa un ejemplo de cómo la tecnología open-hardware/software puede incorporarse en una gran organización y del bajo coste con el que se puede prototipar hardware.
 
 ## Arquitectura
-El componente principal que he utilizado en esta arquitectura es un _Broker_ (Mosquitto) de mensajería tipo MQTT. En el _backend_ hay  un orquestador extremadamente sencillo de programar, Node-RED. Como dispositivos periféricos tenermos la tarjeta con los indicadores LED, el teléfono móvil con la pulsera inteligente asociada y un robot modelo OTTO. Todo interconectado con una red Wifi. 
+El componente principal que he utilizado en esta arquitectura es un _Broker_ (Mosquitto) de mensajería tipo MQTT. En el _backend_ hay  un orquestador extremadamente sencillo de programar, Node-RED. Como dispositivos periféricos tenemos la tarjeta con los indicadores LED, el teléfono móvil con la pulsera inteligente asociada y un robot modelo OTTO. Todo interconectado con una red Wifi. 
 
 ![Arquitectura Gadget KPI](https://github.com/McOrts/kpi-booking-gadget/blob/master/images/Gadget_KPI_arquitectura.png?raw=true)
 
-La operativa de toda la aplicación parte de las consultas que se hacen desde el _backend_ (Node-RED):
-- Se lanza una petición REST la los web-services:
--- DATADOG para los indicadores de negocio. [](https://app.datadoghq.com/api/v1/query?api_key=...)
--- GeoJSON servicio público de alertas globales de terremotos. [](https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson)
-- Se componen los mensajes para los topics de MQTT que la tarjeta está escuchando. La estructura es así:
+Las tecnologías y herramientas utilizadas son bien conocidas en el mundo maker para IOT:
+* Backend: [Node-RED](https://nodered.org/)
+* Broker de colas MQTT: [Eclipse Mosquitto](https://mosquitto.org/)
+* Micro-controlador: ESP-8266 formato [WEMOS D1 mini](https://wiki.wemos.cc/products:d1:d1_mini)
+* Servidor: [Raspberry Pi Zero Wifi](https://www.raspberrypi.org/products/raspberry-pi-zero/)
+* Robot: [Otto](https://www.ottodiy.com/) basado en una versión Wifi no oficial del Arduino Nano.
+
+### Procesos
+__La operativa__ de toda la aplicación parte de las consultas que se hacen desde el _backend_ (Node-RED):
+1. Se lanza una petición REST la los web-services:
+    - DATADOG para los indicadores de negocio. [](https://app.datadoghq.com/api/v1/query?api_key=...)
+    - GeoJSON servicio público de alertas globales de terremotos. [](https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson)
+    Para componer la petición es necesario utilizar un nodo de programación en Javascript con este código:
+```
+  var TimeTo = Math.floor((new Date).getTime()/1000);
+  var TimeFrom = TimeTo-1800;
+  var URLstr1 = "https://app.datadoghq.com/api/v1/query?api_key=";
+  var URLstr2 = flow.get('api_key');
+  var URLstr3 = "&application_key="
+  var URLstr4 = flow.get('application_key');
+  var URLstr5 = "&from=";
+  var URLstr6 = TimeFrom.toString();
+  var URLstr7 = "&to=";
+  var URLstr8 = TimeTo.toString();
+  var URLstr9 = "&query=sum:evolution.com.evo.servlets.NewShoppingCartConfirmation.processRequest.count{*,env:live,building-block:evolution}.as_count()"
+msg.payload = URLstr1.concat(URLstr2,URLstr3,URLstr4,URLstr5,URLstr6,URLstr7,URLstr8,URLstr9);
+return [msg];
+```
+   Así mismo, la respuesta del webservice, aunque se nos entrega parseada por el nodo, tendremos que interpretar el mensaje JSON para lo que tenemos que utilizar otro nódo de función con el código:
+```
+p=msg.payload;
+node.log(typeof P);
+var Bookings = 0;
+var t = p.series[0].length;
+var i;
+for (i=0; i<t; i++) {
+   Bookings = Bookings + p.series[0].pointlist[i][1];
+}
+Bookings = Bookings * 2;
+msg.payload=Bookings;
+msg.topic = "bookings";
+return msg;
+```
+2. Se componen los mensajes para los topics de MQTT que la tarjeta está escuchando. La estructura es así:
 ```
 `-- hbg
     |-- kpi
     |   `-- panic
     |   `-- operation
 ```
-evolutionDW
-bookerror21
-warnings
+   Por ejemplo, si en Node-RED se detecta a través del _endpoint_ REST del Datadog que las ventas del B2B2C suben. Montará este mensaje MQTT: 
+> /hbg/kpi/operation/evolutionUP
+
+   Otros ejemplos de comandos que se pueden generar son: "bookerror21" (2.5% de errores) y "warnings" para un nuevo twitt de Trump.
+
+![Flujo Node-RED del proceso hasta aquí](https://github.com/McOrts/kpi-booking-gadget/blob/master/images/Node-RED_Flow_EVO.PNG?raw=true) 
+
+3. El servidor MQTT (Mosquitto) recibe el mensaje y lo replica a todos los clientes subscritos al topic "/hbg/kpi/operation"
+4. El microcontrolador de la tarjeta es uno de esos clientes, por lo que recibe el mensaje e interpreta su _payload_. Por ejemplo "bookerror21" que lo transformará en una instrucción al puerto digital D4 del ESP8266 con un valor RGB (Rojo,verde,azul) de 210,255,0 encendiendo el primer led en un color casi amarillo.
+
+Para el caso del pulsar el _botón "Panic"_ de la tarjeta. Hay que describir un proceso inverso al anterior:
+1. El 
+
+![Flujo Node-RED del proceso de Panic](https://github.com/McOrts/kpi-booking-gadget/blob/master/images/Node-RED_Flow_Panic.PNG?raw=true) 
+
 
 El Estos dos componentes están ejecutándose en el servidor (Raspberry Pi Zero) 
 
-
-Las tecnologías y herramientas utilizadas son bien conocidad en el mundo maker para IOT:
-* Backend: [Node-RED](https://nodered.org/)
-* Broker de colas MQTT: [Eclipse Mosquitto](https://mosquitto.org/)
-* Micro-controlador: ESP-8266 formato [WEMOS D1 mini](https://wiki.wemos.cc/products:d1:d1_mini)
-* Servidor: [Raspberry Pi Zero Wifi](https://www.raspberrypi.org/products/raspberry-pi-zero/)
-* Robot: [Otto](https://www.ottodiy.com/) basado en una versión Wifi no oficial del Arduino Nano.
 
 ## El dispositivo
 Está construido bajo los principios del _Do It Yourselft_. Con las herramientas básicas para soldar y para trabajar con plásticos y estos materiales. Es posible que cualquier persona pueda construir este _gadget_ por si mismo.
