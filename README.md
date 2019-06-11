@@ -136,7 +136,7 @@ El código fuente en C++ se puede encontrar en [este _sketch_](https://github.co
   alt="Basic video" width="240" height="180" border="10" />
   
 ## Siguientes pasos
-Existe una tecnologia y técnica de fabricación de componentes en superficie llamada SMD (Surface Mount Device) que permite la minituarización de los circuitos impresos (PCB). Y en esta linea estoy trabajando para tener unos dispositivos 
+Existe una tecnologia y técnica de fabricación de componentes en superficie llamada SMD (Surface Mount Device) que permite la minituarización de los circuitos impresos (PCB). Y en esta linea estoy trabajando para tener unos dispositivos más robustos que puedan tener un uso diario. 
 
 ## Agradecimientos y referencias
 - [MQTT.org](http://mqtt.org)
