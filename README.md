@@ -101,14 +101,15 @@ Node-RED también tiene una serie de nodos con los que se puede montar una pági
 
 El uso es tan simple como dirigir los mensajes a estas 'cajas' y colocarlas en el orden conveniente dentro del _layauut_ del _dashboard_:
 
-![Configuración Node-RED del Dashboard](https://github.com/McOrts/kpi-booking-gadget/blob/master/images/Node-RED_Flow_DashboardPNG?raw=true)
+![Configuración Node-RED del Dashboard](https://github.com/McOrts/kpi-booking-gadget/blob/master/images/Node-RED_Flow_Dashboard.PNG?raw=true)
 
 ## Hardware e instalaciones
 ### Servidor 
 Tanto el _Broker_ MQTT de mensajería (Mosquitto) coo el _backend_ (Node-RED) están instalados en un _One Single Computer_ que es la conocida Raspberry Pi Zero. Se puso a la venta en 2015. Con un coste de cinco dólares. llegándose a regalar en el número #40 de la revista The MagPi. Sus características principales son:
 - Procesar ARM 1GHz, single-core CP 
 - Sistema operativo: Raspbian es un distribución de Debian
-- 512MB de RAM 
+- 512MB de RAM
+
 ![Raspberry Pi Zero](https://github.com/McOrts/kpi-booking-gadget/blob/master/images/FreeRPIZero.PNG?raw=true) 
 
 Sin entrar en los detalles de la instalación de este servidor para no hacer demasiado largo este documento y para no repetir lo que se puede encontrar perfectamente explicado, estas son las páginas donde se pueden encontrar las instrucciones adecuadas:
@@ -126,6 +127,7 @@ El dispositivo está basado en el microcontrolador SP8266. Cuyo origen está en 
 El código fuente en C++ se puede encontrar en [este _sketch_](https://github.com/McOrts/kpi-booking-gadget/tree/master/kpi-booking-gadget-device) de este mismo repositorio. Y este el circuito que puede construirse en muchos formatos:
 
 ![BB](https://github.com/McOrts/kpi-booking-gadget/blob/master/images/kpi-booking-gadget-device_bb.png?raw=true) 
+![BB](https://github.com/McOrts/kpi-booking-gadget/blob/master/images/Gadget_KPI_rear.png?raw=true) 
 
 ## Siguientes pasos
 Existe una tecnologia y técnica de fabricación de componentes en superficie llamada SMD (Surface Mount Device) que permite la minituarización de los circuitos impresos (PCB). Y en esta linea estoy trabajando para tener unos dispositivos 
