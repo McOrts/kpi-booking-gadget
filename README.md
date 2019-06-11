@@ -25,6 +25,14 @@ El componente principal que he utilizado en esta arquitectura es un _Broker_ (Mo
 
 ![Arquitectura Gadget KPI](https://github.com/McOrts/kpi-booking-gadget/blob/master/images/Gadget_KPI_arquitectura.png?raw=true)
 
+Las tecnologías y herramientas utilizadas son bien conocidas en el mundo maker para IOT:
+* Backend: [Node-RED](https://nodered.org/)
+* Broker de colas MQTT: [Eclipse Mosquitto](https://mosquitto.org/)
+* Micro-controlador: ESP-8266 formato [WEMOS D1 mini](https://wiki.wemos.cc/products:d1:d1_mini)
+* Servidor: [Raspberry Pi Zero Wifi](https://www.raspberrypi.org/products/raspberry-pi-zero/)
+* Robot: [Otto](https://www.ottodiy.com/) basado en una versión Wifi no oficial del Arduino Nano.
+
+### Procesos
 __La operativa__ de toda la aplicación parte de las consultas que se hacen desde el _backend_ (Node-RED):
 1. Se lanza una petición REST la los web-services:
     - DATADOG para los indicadores de negocio. [](https://app.datadoghq.com/api/v1/query?api_key=...)
@@ -69,29 +77,22 @@ return msg;
 ```
    Por ejemplo, si en Node-RED se detecta a través del _endpoint_ REST del Datadog que las ventas del B2B2C suben. Montará este mensaje MQTT: 
 > /hbg/kpi/operation/evolutionUP
-    Otros ejemplos de comandos que se pueden generar son: "bookerror21" (2.5% de errores) y "warnings" para un nuevo twitt de Trump.
+
+   Otros ejemplos de comandos que se pueden generar son: "bookerror21" (2.5% de errores) y "warnings" para un nuevo twitt de Trump.
 
 ![Flujo Node-RED del proceso hasta aquí](https://github.com/McOrts/kpi-booking-gadget/blob/master/images/Node-RED_Flow_EVO.PNG?raw=true) 
 
 3. El servidor MQTT (Mosquitto) recibe el mensaje y lo replica a todos los clientes subscritos al topic "/hbg/kpi/operation"
 4. El microcontrolador de la tarjeta es uno de esos clientes, por lo que recibe el mensaje e interpreta su _payload_. Por ejemplo "bookerror21" que lo transformará en una instrucción al puerto digital D4 del ESP8266 con un valor RGB (Rojo,verde,azul) de 210,255,0 encendiendo el primer led en un color casi amarillo.
 
-
-Para el caso del pulsar el botón "Panic" de la tarjeta. Hay que describir un proceso inverso al anterior:
-1. 
+Para el caso del pulsar el _botón "Panic"_ de la tarjeta. Hay que describir un proceso inverso al anterior:
+1. El 
 
 ![Flujo Node-RED del proceso de Panic](https://github.com/McOrts/kpi-booking-gadget/blob/master/images/Node-RED_Flow_Panic.PNG?raw=true) 
 
 
 El Estos dos componentes están ejecutándose en el servidor (Raspberry Pi Zero) 
 
-
-Las tecnologías y herramientas utilizadas son bien conocidad en el mundo maker para IOT:
-* Backend: [Node-RED](https://nodered.org/)
-* Broker de colas MQTT: [Eclipse Mosquitto](https://mosquitto.org/)
-* Micro-controlador: ESP-8266 formato [WEMOS D1 mini](https://wiki.wemos.cc/products:d1:d1_mini)
-* Servidor: [Raspberry Pi Zero Wifi](https://www.raspberrypi.org/products/raspberry-pi-zero/)
-* Robot: [Otto](https://www.ottodiy.com/) basado en una versión Wifi no oficial del Arduino Nano.
 
 ## El dispositivo
 Está construido bajo los principios del _Do It Yourselft_. Con las herramientas básicas para soldar y para trabajar con plásticos y estos materiales. Es posible que cualquier persona pueda construir este _gadget_ por si mismo.
