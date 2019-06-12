@@ -138,6 +138,7 @@ Yo he utilizado una tarjeta de fidelización de BP a la que le he hecho los aguj
 ![BB](https://github.com/McOrts/kpi-booking-gadget/blob/master/images/Gadget_KPI_rear.png?raw=true) 
 
 ## Demo en vivo
+Tuve la oportunidad de hacer una presentación a miembros de la Asociación de Makers de Mallorca en su reunión mensual. Es un grupo abierto al que te puedes añadir sin ningún tipo de compromiso: [Makespace Mallorca](https://www.meetup.com/es-ES/Meetup-de-Startups-de-tecnologia-en-Palma/)
 
   <a href="http://www.youtube.com/watch?feature=player_embedded&v=7N38AHVoB3g
   " target="_blank"><img src="http://img.youtube.com/vi/7N38AHVoB3g/0.jpg"
