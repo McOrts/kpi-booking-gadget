@@ -53,7 +53,7 @@ __La operativa__ de toda la aplicación parte de las consultas que se hacen desd
 msg.payload = URLstr1.concat(URLstr2,URLstr3,URLstr4,URLstr5,URLstr6,URLstr7,URLstr8,URLstr9);
 return [msg];
 ```
-   Así mismo, la respuesta del webservice, aunque se nos entrega parseada por el nodo, tendremos que interpretar el mensaje JSON para lo que tenemos que utilizar otro nódo de función con el código:
+   Así mismo, la respuesta del webservice, aunque se nos entrega parseada por el nodo. Tendremos que interpretar el mensaje JSON para lo que utilizaremos otro nódo de función con el siguiente código:
 ```
 p=msg.payload;
 node.log(typeof P);
@@ -68,7 +68,7 @@ msg.payload=Bookings;
 msg.topic = "bookings";
 return msg;
 ```
-2. Se componen los mensajes para los topics de MQTT que la tarjeta está escuchando. La estructura es así:
+2. Se componen los mensajes para los topics de MQTT que la tarjeta está escuchando. Su estructura es gerárquica y podremos usar cualquier nivel:
 ```
 `-- hbg
     |-- kpi
@@ -77,6 +77,9 @@ return msg;
 ```
    Por ejemplo, si en Node-RED se detecta a través del _endpoint_ REST del Datadog que las ventas del B2B2C suben. Montará este mensaje MQTT: 
 > /hbg/kpi/operation/evolutionUP
+
+Pero cuando el encendemos la tarjeta, el programa de inicio del ESP8266 emite un _I´m alive_ con este mensaje:
+> /hbg/kpi/starting
 
    Otros ejemplos de comandos que se pueden generar son: "bookerror21" (2.5% de errores) y "warnings" para un nuevo twitt de Trump.
 
@@ -98,6 +101,7 @@ Para el caso del pulsar el _botón "Panic"_ de la tarjeta. Hay que describir un 
 
 ### El _Dashboard_
 Node-RED también tiene una serie de nodos con los que se puede montar una página web responsiva. Es fácil utilizar controles y gráficas, así como cajas de texto, formularios, etc...
+En este proyecto he incluido las gráficas historicas de los indicadores más un botón de actualización manual y un icono de alarma que se pone en rojo cuando se pulsa el botón de Panic de la tarjeta.
 
 ![Node-RED Dashboard](https://github.com/McOrts/kpi-booking-gadget/blob/master/images/Gadget_KPI_dashboard.png?raw=true)
 
@@ -107,26 +111,28 @@ El uso es tan simple como dirigir los mensajes a estas 'cajas' y colocarlas en e
 
 ## Hardware e instalaciones
 ### Servidor 
-Tanto el _Broker_ MQTT de mensajería (Mosquitto) coo el _backend_ (Node-RED) están instalados en un _One Single Computer_ que es la conocida Raspberry Pi Zero. Se puso a la venta en 2015. Con un coste de cinco dólares. llegándose a regalar en el número #40 de la revista The MagPi. Sus características principales son:
+Tanto el _Broker_ MQTT de mensajería (Mosquitto) como el _backend_ (Node-RED) están instalados en un _One Single Computer_ que es la conocida Raspberry Pi Zero. Este mini-ordenador se puso a la venta en 2015. Con un coste de cinco dólares. llegándose a regalar en el número #40 de la revista The MagPi. Sus características principales son:
 - Procesar ARM 1GHz, single-core CP 
 - Sistema operativo: Raspbian es un distribución de Debian
 - 512MB de RAM
 
 ![Raspberry Pi Zero](https://github.com/McOrts/kpi-booking-gadget/blob/master/images/FreeRPIZero.PNG?raw=true) 
 
-Sin entrar en los detalles de la instalación de este servidor para no hacer demasiado largo este documento y para no repetir lo que se puede encontrar perfectamente explicado, estas son las páginas donde se pueden encontrar las instrucciones adecuadas:
+Sin entrar en los detalles de la instalación de este servidor para no hacer demasiado largo este documento y para no repetir lo que se puede encontrar perfectamente explicado. Estas son las páginas donde se pueden encontrar las instrucciones adecuadas para:
 1. [Sistema operativo Raspbian](https://www.raspberrypi.org/documentation/installation/installing-images/README.md)
 2. [Node-RED](https://nodered.org/docs/hardware/raspberrypi)
 3. [Mosquitto](https://www.instructables.com/id/Installing-MQTT-BrokerMosquitto-on-Raspberry-Pi/)
 
 ### La tarjeta
-Está construida bajo los principios del _Do It Yourselft_. Con las herramientas básicas para soldar y para trabajar con plásticos y estos materiales. Es posible que cualquier persona pueda construir este _gadget_ por si mismo.
+Está construida bajo los principios del _Do It Yourselft_ (DIY). Con las herramientas básicas para soldar y para trabajar con plásticos y estos materiales, es posible que cualquier persona pueda construir este _gadget_ por si misma.
 
 El dispositivo está basado en el microcontrolador SP8266. Cuyo origen está en Shanghai de manos de la empresa Espressif en el 2014.	Pero no nació para usarse como microcontrolador. Si no como controlador Wifi de bajo coste. Este microchip tiene todo el stack TCP/IP que la comunidad Maker adoptó como un dispositivo independiente.
 
 ![WEMOS D1 Mini](https://github.com/McOrts/kpi-booking-gadget/blob/master/images/WEMOS-d1-mini-esp8266-board-PINOUT.jpg?raw=true) 
 
-El código fuente en C++ se puede encontrar en [este _sketch_](https://github.com/McOrts/kpi-booking-gadget/tree/master/kpi-booking-gadget-device) de este mismo repositorio. Y este el circuito que puede construirse en muchos formatos:
+El código fuente en C++ se puede encontrar en [este _sketch_](https://github.com/McOrts/kpi-booking-gadget/tree/master/kpi-booking-gadget-device) de este mismo repositorio. Y este el circuito que puede construirse en muchos formatos. Yo he utilizado una tarjeta de fidelización de BP a la que le he hecho los agujeros y cortes necesarios para montar el WEMOS, la bateria, el pulsador, un interruptor de encendido y una tira con tres LEDs del tipo WS2812B que permite el encendido direccionado. Siendo 0 el primer LED y 2 el último en este proyecto. 
+
+El esquemático de conexión es el siguiente:
 
 ![BB](https://github.com/McOrts/kpi-booking-gadget/blob/master/images/kpi-booking-gadget-device_bb.png?raw=true) 
 ![BB](https://github.com/McOrts/kpi-booking-gadget/blob/master/images/Gadget_KPI_rear.png?raw=true) 
