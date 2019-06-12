@@ -1,15 +1,15 @@
 # Gadget DIY para controlar tu empresa.
-Con un claro ejemplo de_Over-engineering_ esta es la guía para la fabricación de un pequeño dispositivo para recibir en tiempo real los indicadores más críticos de nuestro negocio. Y poder interactuar con un backend atendiendo a nuestras peticiones.
+Con un claro ejemplo de _Over-engineering_ esta es la guía para la fabricación de un pequeño dispositivo que recibirá en tiempo real los indicadores más críticos de nuestro negocio. Y poder interactuar con un backend atendiendo a nuestras peticiones.
 
 ![](https://github.com/McOrts/kpi-booking-gadget/blob/master/images/Gadget_KPI_portada.PNG?raw=true)
 
-Trabajo para una empresa de distribución global de alojamientos hoteleros. Lo que significa que tiene una infraestuctura descentralizada para poder resolver las peticiones de los clientes en su propia región geográfica. Esto lo permite un sistema de sincronismos y cachés que tienen la contrapartida de generar algunos errores de valoración y disponibilidad de reservas.
+Trabajo para una empresa de distribución global de alojamientos hoteleros. Lo que significa que tiene una infraestructura descentralizada para poder resolver las peticiones de los clientes en su propia región geográfica. Esto lo permite un sistema de sincronismos y cachés que tienen la contrapartida de generar algunos errores de valoración y disponibilidad de reservas.
 
-Este y otros indicadores aunque son críticos, su accesibilidad está reducida a la consulta a través de un sistema de monitorización como DataDog. __A fin de poder monitorizar de una forma efectiva estas alertas, he ideado un _gadget_ en forma de tarjeta de identificación que, conectada por wifi, traduce en tiempo real las cifras de KPIs a codigos de color y destellos de luz__.
+Este y otros indicadores, aunque son críticos, su accesibilidad está reducida a la consulta a través de un sistema de monitorización como DataDog. __A fin de poder monitorizar de una forma efectiva estas alertas, he ideado un _gadget_ en forma de tarjeta de identificación que, conectado por wifi, traduce en tiempo real las cifras de KPIs a códigos de color y destellos de luz__.
 
 ![](https://github.com/McOrts/kpi-booking-gadget/blob/master/images/Gadget_KPI.gif?raw=true)
 
-Este dispositivo que representa el _front_ de la aplicación. Tiene tres indicadores luminosos (NeoPixel) y un pulsador que, de izquierda a derecha, son para:
+Este dispositivo representa el _front_ de la aplicación. Tiene un pulsador y tres indicadores luminosos (NeoPixel) que de izquierda a derecha, son para:
 - __Error en las confirmaciones de reserva__: 0% verde al 5% rojo.
 - __Ventas por el canal B2B2C__: 
     - Se reducen: de blanco a negro
@@ -88,7 +88,7 @@ return msg;
 Para el caso del pulsar el _botón "Panic"_ de la tarjeta. Hay que describir un proceso inverso al anterior:
 1. El microcontrolador generará este mensaje MQTT:
 > /hbg/kpi/panic/on
-2. Y en este caso, el _backend_ está actua como un cliente suscrito a este topic. A partir de aquí, con Node-RED podemos hace casi cualquier cosa. En mi caso me envía un mail con un formato que activa las alertas de mi reloj Xiaomi MiMBand y activa un icoco en el _dashboard_ de la página web servida por Node-RED.
+2. Y en este caso, el _backend_ actúa como un cliente suscrito a este topic. A partir de aquí, con Node-RED podemos hace casi cualquier cosa. En mi caso me envía un mail con un formato que activa las alertas de mi reloj Xiaomi MiBand y activa un icono en el _dashboard_ de la página web servida por Node-RED.
 
 ![Flujo Node-RED del proceso de Panic](https://github.com/McOrts/kpi-booking-gadget/blob/master/images/Node-RED_Flow_Panic.PNG?raw=true) 
 
