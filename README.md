@@ -105,7 +105,7 @@ En este proyecto he incluido las gráficas historicas de los indicadores más un
 
 ![Node-RED Dashboard](https://github.com/McOrts/kpi-booking-gadget/blob/master/images/Gadget_KPI_dashboard.png?raw=true)
 
-El uso es tan simple como dirigir los mensajes a estas 'cajas' y colocarlas en el orden conveniente dentro del _layauut_ del _dashboard_:
+El uso es tan simple como dirigir los mensajes a estas 'cajas' y colocarlas en el orden conveniente dentro del _layaut_ del _dashboard_:
 
 ![Configuración Node-RED del Dashboard](https://github.com/McOrts/kpi-booking-gadget/blob/master/images/Node-RED_Flow_Dashboard.PNG?raw=true)
 
@@ -130,11 +130,11 @@ El dispositivo está basado en el microcontrolador SP8266. Cuyo origen está en 
 
 ![WEMOS D1 Mini](https://github.com/McOrts/kpi-booking-gadget/blob/master/images/WEMOS-d1-mini-esp8266-board-PINOUT.jpg?raw=true) 
 
-El código fuente en C++ se puede encontrar en [este _sketch_](https://github.com/McOrts/kpi-booking-gadget/tree/master/kpi-booking-gadget-device) de este mismo repositorio. Y este el circuito que puede construirse en muchos formatos. Yo he utilizado una tarjeta de fidelización de BP a la que le he hecho los agujeros y cortes necesarios para montar el WEMOS, la bateria, el pulsador, un interruptor de encendido y una tira con tres LEDs del tipo WS2812B que permite el encendido direccionado. Siendo 0 el primer LED y 2 el último en este proyecto. 
-
+El código fuente en C++ se puede encontrar en [este _sketch_](https://github.com/McOrts/kpi-booking-gadget/tree/master/kpi-booking-gadget-device) de este mismo repositorio. Y este el circuito que puede construirse en muchos formatos. 
 El esquemático de conexión es el siguiente:
-
 ![BB](https://github.com/McOrts/kpi-booking-gadget/blob/master/images/kpi-booking-gadget-device_bb.png?raw=true) 
+
+Yo he utilizado una tarjeta de fidelización de BP a la que le he hecho los agujeros y cortes necesarios para montar el WEMOS, la bateria, el pulsador, un interruptor de encendido y una tira con tres LEDs del tipo WS2812B que permite el encendido direccionado. Siendo 0 el primer LED y 2 el último en este proyecto. 
 ![BB](https://github.com/McOrts/kpi-booking-gadget/blob/master/images/Gadget_KPI_rear.png?raw=true) 
 
 ## Demo en vivo
