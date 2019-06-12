@@ -94,6 +94,8 @@ Para el caso del pulsar el _botón "Panic"_ de la tarjeta. Hay que describir un 
 
 3. Adicionalmente he añadido la librería del cliente MQTT al programa del robot OTTO de manera que cuando recibe este mensaje ejecuta la rutina del "Cruzaito":
 
+![OTTO](https://github.com/McOrts/kpi-booking-gadget/blob/master/images/OTTO.gif?raw=true)
+
 ### El _Dashboard_
 Node-RED también tiene una serie de nodos con los que se puede montar una página web responsiva. Es fácil utilizar controles y gráficas, así como cajas de texto, formularios, etc...
 
